@@ -11,7 +11,10 @@ RUN a2enmod rewrite
 WORKDIR /var/www/html
 
 # Step 5: Copy project files into container
-COPY . /var/www/html
+# COPY . /var/www/html
+
+# Step 5: ONLY copy actual app
+COPY ./first_project /var/www/html
 
 # Step 6: Set permissions (IMPORTANT)
 RUN chown -R www-data:www-data /var/www/html
