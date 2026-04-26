@@ -6,5 +6,6 @@ node_modules/
 vendor/
 .DS_Store
 pushtodockerhub.md
-ReadmePiplinescript.md
 readme.md
+pipeline-1.groovy
+pipeline-2.groovy

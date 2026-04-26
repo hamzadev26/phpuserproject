@@ -9,6 +9,8 @@
 
 <body>
 
+    <h1>Jenkis</h1>
+
     <h2>Add User</h2>
 
     <form action="insert.php" method="POST">
