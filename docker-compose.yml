@@ -1,13 +1,14 @@
 services:
   web:
-    image: mujtaba2626/phpuserproject-web:v1
+    image: mujtaba2626/phpuserproject-web:latest
     container_name: first_project_dev_web_container
     ports:
       - "8081:80"
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - first_project_network
@@ -23,6 +24,10 @@ services:
     restart: unless-stopped
     networks:
       - first_project_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5  
 
 volumes:
   first_project_dev_db_data:

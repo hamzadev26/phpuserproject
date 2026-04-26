@@ -8,4 +8,5 @@ vendor/
 pushtodockerhub.md
 readme.md
 pipeline-1.groovy
-pipeline-2.groovy
+cdpipeline.groovy
+imagetagpipeline.groovy

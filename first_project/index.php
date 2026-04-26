@@ -9,7 +9,7 @@
 
 <body>
 
-    <h1>Jenkis</h1>
+    <h1>Jenkis image tag</h1>
 
     <h2>Add User</h2>
 
