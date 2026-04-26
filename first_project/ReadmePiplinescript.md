@@ -1,58 +1,73 @@
 pipeline {
 agent any
 
-    environment {
-        // Environment variables define kare hai github par .env file upload nahi karte
-        DB_HOST = "db"
-        DB_USER = "dev"
-        DB_PASS = "123456"
-        DB_NAME = "first_project"
-        MYSQL_ROOT_PASSWORD = "rootpass"
-        MYSQL_DATABASE = "first_project"
-        MYSQL_USER = "dev"
-        MYSQL_PASSWORD = "123456"
-    }
-
     stages {
+
         stage('Code') {
             steps {
-                echo 'Code clone kar raha hoon...'
-                git url: "https://github.com/hamzadev26/phpuserproject.git", branch:"main"
+                git url: "https://github.com/hamzadev26/phpuserproject.git", branch: "main"
             }
         }
 
-        stage('Build And Run') {
+        stage('Build & Push') {
             steps {
-                echo 'Containers build aur start kar raha hoon...'
-                sh "docker compose up -d --build"
-                sh "sleep 10"  // Database ready hone ke liye wait kar
-            }
-        }
-
-        stage('Verify') {
-            steps {
-                echo 'Services check kar raha hoon...'
-                sh "docker compose ps"
-                sh "docker compose logs"
+                withCredentials([usernamePassword(
+                    credentialsId: "DockerHubCredIDName",
+                    usernameVariable: "DOCKER_USER",
+                    passwordVariable: "DOCKER_PASS"
+                )]) {
+                    sh """
+                    echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
+                    docker build -t \$DOCKER_USER/phpuserproject-web:v1 .
+                    docker push \$DOCKER_USER/phpuserproject-web:v1
+                    docker logout
+                    """
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'All containers successfully running! ✓'
-                sh "echo 'Web: http://localhost:8080'"
-                sh "echo 'Database: localhost:3307'"
+                withCredentials([
+                    file(credentialsId: 'phpuserproject_env_file', variable: 'ENV_FILE')
+                ]) {
+                    sh """
+                    echo "Stopping old containers..."
+                    docker compose down || true
+
+                    echo "Injecting .env file..."
+                    cp \$ENV_FILE .env
+
+                    echo "Starting containers..."
+                    docker compose up -d --build
+
+                    echo "Running containers:"
+                    docker compose ps
+                    """
+                }
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                sh "docker compose logs --tail=50"
             }
         }
     }
 
     post {
         failure {
-            echo 'Pipeline fail ho gaya!'
+            echo "Pipeline failed!"
             sh "docker compose logs"
         }
+
+        success {
+            echo "Deployment successful!"
+            sh "echo 'App: http://localhost:8081'"
+        }
+
         always {
-            echo 'Pipeline complete!'
+            echo "Pipeline finished."
         }
     }
 

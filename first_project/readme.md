@@ -1,3 +1,37 @@
+Github Repo Se Code Clone Kiya
+Docker Compose Se Image Build or Container Run Kiya
+
+pushtodockerhub file . md
+
+1.  Code Clone
+2.  Build Image using Dockerfile
+3.  Push to Docker Hub (v1 tag)
+4.  Run Containers
+5.  Verify
+6.  Deploy
+
+        stage('Build Image using Dockerfile') {
+            steps {
+                echo 'Image Build kar raha hoon...'
+                sh "docker build -t phpuserproject-web:latest ."
+            }
+        }
+
+        stage('Image Push to Docker Hub') {
+            steps {
+                echo 'Image Docker Hub Per Push Kar raha hoon...'
+                withCredentials([usernamePassword(
+                    'credentialsId': "DockerHubCredIDName",
+                    passwordVariable:"dockerHubPass",
+                    usernameVariable:"dockerHubUser")]){
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                sh "docker image tag phpuserproject-web:latest ${env.dockerHubUser}/phpuserproject-web:v1"
+                sh "docker push ${env.dockerHubUser}/phpuserproject-web:v1"
+                sh "docker logout"
+                }
+            }
+        }
+
 abhi mene jenkis ke script me direct add kar diya hai enviroment variable
 
 Bilkul OK hai! ✅ Par kuch SECURITY CONCERNS hain:
