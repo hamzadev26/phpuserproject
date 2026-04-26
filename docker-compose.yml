@@ -1,16 +1,11 @@
 services:
   web:
-    build: .
+    image: mujtaba2626/phpuserproject-web:v1
     container_name: first_project_dev_web_container
     ports:
       - "8081:80"
-    volumes:
-      - ./first_project:/var/www/html
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
-      DB_NAME: ${DB_NAME}
+    env_file:
+      - .env
     depends_on:
       - db
     restart: unless-stopped
@@ -20,11 +15,8 @@ services:
   db:
     image: mysql:8.0
     container_name: first_project_dev_db_container
-    environment:  
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-    ports:
-      - "3307:3306"
+    env_file:
+      - .env
     volumes:
       - first_project_dev_db_data:/var/lib/mysql
       - ./my_init.sql:/docker-entrypoint-initdb.d/init.sql
