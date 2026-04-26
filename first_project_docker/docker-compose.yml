@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: first_project_dev_web_container
+    ports:
+      - "8080:80"
+    volumes:
+      - ./first_project:/var/www/html
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - first_project_network
+
+  db:
+    image: mysql:8.0
+    container_name: first_project_dev_db_container
+    environment:  
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - first_project_dev_db_data:/var/lib/mysql
+      - ./my_init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    networks:
+      - first_project_network
+
+volumes:
+  first_project_dev_db_data:
+
+networks:
+  first_project_network:
