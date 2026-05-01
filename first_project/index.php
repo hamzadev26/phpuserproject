@@ -4,12 +4,12 @@
 <html>
 
 <head>
-    <title>First PHP Project Jenkis new</title>
+    <title>First PHP Project</title>
 </head>
 
 <body>
 
-    <h1>Jenkis image tag new</h1>
+    <h1>First PHP Project Jenkins Pipeline Latest Image</h1>
 
     <h2>Add User</h2>
 

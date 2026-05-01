@@ -1,6 +1,6 @@
 services:
   web:
-    image: mujtaba2626/phpuserproject-web:10
+    image: mujtaba2626/phpuserproject-web:latest
     container_name: first_project_dev_web_container
     ports:
       - "8081:80"
@@ -9,7 +9,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    restart: unless-stopped
+    restart: always
     networks:
       - first_project_network
 
@@ -21,13 +21,13 @@ services:
     volumes:
       - first_project_dev_db_data:/var/lib/mysql
       - ./my_init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: unless-stopped
+    restart: always
     networks:
       - first_project_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"]
       interval: 10s
-      retries: 5  
+      retries: 5
 
 volumes:
   first_project_dev_db_data:

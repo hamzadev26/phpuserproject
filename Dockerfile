@@ -14,10 +14,11 @@ WORKDIR /var/www/html
 # COPY . /var/www/html
 
 # Step 5: ONLY copy actual app
-COPY ./first_project /var/www/html
+COPY ./first_project/ /var/www/html
 
 # Step 6: Set permissions (IMPORTANT)
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
 # Step 7: Expose port
 EXPOSE 80
