@@ -1,6 +1,6 @@
 services:
   web:
-    image: mujtaba2626/phpuserproject-web:latest
+    image: mujtaba2626/phpuserproject-web:l5
     container_name: first_project_dev_web_container
     ports:
       - "8081:80"
