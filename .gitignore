@@ -10,3 +10,4 @@ readme.md
 pipeline-1.groovy
 cdpipeline.groovy
 git-push-to-jenkis-run.groovy
+sharedlibrary.groovy
