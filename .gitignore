@@ -5,8 +5,8 @@
 node_modules/
 vendor/
 .DS_Store
-pushtodockerhub.md
+pushtodockerhub.groovy
 readme.md
 pipeline-1.groovy
 cdpipeline.groovy
-imagetagpipeline.groovy
+git-push-to-jenkis-run.groovy

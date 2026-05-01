@@ -4,7 +4,7 @@
 <html>
 
 <head>
-    <title>First PHP Project Jenkis</title>
+    <title>First PHP Project Jenkis new</title>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
     $result = mysqli_query($conn, "SELECT * FROM users");
 
     while ($row = mysqli_fetch_assoc($result)) {
-        echo $row['name'] . " - " . $row['email'] . "<br>";
+        echo htmlspecialchars($row['name']) . " - " . htmlspecialchars($row['email']) . "<br>";
     }
     ?>
 
